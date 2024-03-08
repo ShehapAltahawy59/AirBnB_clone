@@ -13,6 +13,7 @@ import json
 from models.engine.file_storage import FileStorage
 from models import storage
 
+
 class TestAmenity(unittest.TestCase):
     """Amenity model class test case"""
 
@@ -44,6 +45,7 @@ class TestAmenity(unittest.TestCase):
     #    self.assertTrue('name' in self.amenity.__dict__)
     # OR
     a = Amenity()
+
     def test_has_attributes(self):
         """verify if attributes exist"""
         self.assertTrue(hasattr(self.a, 'name'))
@@ -71,9 +73,9 @@ class TestAmenity(unittest.TestCase):
         self.assertIsInstance(self.a.updated_at, datetime.datetime)
 
     def test_save(self):
-        time.sleep(1)
+
         self.amenity.save()
-        
+
         self.assertNotEqual(self.amenity.created_at, self.amenity.updated_at)
 
     def test_to_dict(self):

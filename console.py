@@ -164,53 +164,62 @@ class HBNBCommand(cmd.Cmd):
                 print("** value missing **")
                 return
             else:
-
+                try:
+                    attr_type = type(getattr(obj, commands[2]))
+                    commands[3] = attr_type(commands[3])
+                except AttributeError:
+                    pass
                 att_name = commands[2]
                 att_value = eval(commands[3])
-                setattr(objs[key], att_name, att_value)
-                storage.save()
+                obj = objs[key]
+                setattr(obj, att_name, att_value)
+                obj.save()
                 return
 
     def default(self, arg):
         """change the default behavior of cmd """
 
         args = arg.split(".")
-        class_name = args[0]
-        command_name = args[1].split("(")[0]
-        command_args = args[1].split("(")[1].split(")")[0].split("''")[0]
-        values = command_args.split(",")
-        _values = [value.strip('""') for value in values]
-        cleaned_values_string = ' '.join(_values)
+        if len(args) != 2:
+            print("*** Unknown syntax: {}".format(arg))
+        else:
+            class_name = args[0]
+            command_name = args[1].split("(")[0]
+            command_args = args[1].split("(")[1].split(")")[0].split("''")[0]
+            values = command_args.split(",")
+            _values = [value.strip('""') for value in values]
+            cleaned_values_string = ' '.join(_values)
 
-        if len(_values) == 2:
-            if _values[1].startswith("{") and _values[1].endswith("}"):
-                attribute_value_pairs = _values[1][1:-1].split(",")
-                dictt = {}
-                for pair in attribute_value_pairs:
-                    attr, val = pair.split(":")
-                    dictt[attr.strip('""')] = val.strip('""')
-                string = ("{} {} {}".format(_values[0], x, y) for x, y in dictt.items())
-                cleaned_values_string = ' '.join(string)
+            if len(_values) == 2:
+                if _values[1].startswith("{") and _values[1].endswith("}"):
+                    attribute_value_pairs = _values[1][1:-1].split(",")
+                    dictt = {}
+                    for pair in attribute_value_pairs:
+                        attr, val = pair.split(":")
+                        dictt[attr.strip('""')] = val.strip('""')
+                        x, y = dictt.items()[0]
+                    string = "{} {} {}".format(_values[0], x, y)
+                    cleaned_value_string = ' '.join(string)
 
-        command_dict = {
-            "all": self.do_all,
-            "count": self.do_count,
-            "show": self.do_show,
-            "destroy": self.do_destroy,
-            "update": self.do_update
-        }
-        if command_name in command_dict.keys():
-            command = command_dict[command_name]
+            command_dict = {
+                "all": self.do_all,
+                "count": self.do_count,
+                "show": self.do_show,
+                "destroy": self.do_destroy,
+                "update": self.do_update
+            }
+            if command_name in command_dict.keys():
+                command = command_dict[command_name]
 
-            if command_name == "show" or command_name == "destroy":
-                string = "{}{}{}".format((class_name), " ", command_args)
-                return command(string)
+                if command_name == "show" or command_name == "destroy":
+                    string = "{}{}{}".format((class_name), " ", command_args)
+                    return command(string)
 
-            elif command_name == "update":
-                string = "{} {}".format((class_name), cleaned_values_string)
-                return command(string)
-            else:
-                return command("{}{}".format(class_name, ""))
+                elif command_name == "update":
+                    string = "{} {}".format((class_name), cleaned_value_string)
+                    return command(string)
+                else:
+                    return command("{}{}".format(class_name, ""))
 
     def do_count(self, arg):
         """print count of class instance"""

@@ -153,8 +153,9 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
         else:
-            objs = storage.all()
+            
             key = "{}.{}".format(commands[0], commands[1])
+            obj = storage.all()["key"]
             if key not in objs.keys():
                 print("** no instance found **")
             elif len(commands) < 3:
@@ -171,7 +172,7 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 att_name = commands[2]
                 att_value = eval(commands[3])
-                obj = objs[key]
+                #obj = objs[key]
                 setattr(obj, att_name, att_value)
                 obj.save()
                 return

@@ -188,7 +188,7 @@ class HBNBCommand(cmd.Cmd):
             command_args = args[1].split("(")[1].split(")")[0].split("''")[0]
             values = command_args.split(",")
             _values = [value.strip('""') for value in values]
-            cleaned_values_string = ' '.join(_values)
+            cleaned_value_string = ' '.join(_values)
 
             if len(_values) == 2:
                 if _values[1].startswith("{") and _values[1].endswith("}"):

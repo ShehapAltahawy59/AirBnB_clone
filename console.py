@@ -212,7 +212,7 @@ class HBNBCommand(cmd.Cmd):
                 command = command_dict[command_name]
 
                 if command_name == "show" or command_name == "destroy":
-                    string = "{}{}{}".format((class_name), " ", command_args)
+                    string = "{}{}{}".format((class_name), " ", command_args.strip('""'))
                     return command(string)
 
                 elif command_name == "update":

@@ -220,6 +220,9 @@ class HBNBCommand(cmd.Cmd):
                     return command(string)
                 else:
                     return command("{}{}".format(class_name, ""))
+            else:
+                print("*** Unknown syntax: {}".format(arg))
+
 
     def do_count(self, arg):
         """print count of class instance"""

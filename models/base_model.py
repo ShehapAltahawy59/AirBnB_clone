@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """A Base class with common methods/attributes
 for other classes
 """
@@ -38,6 +38,7 @@ class BaseModel:
         """updates the updated_at attr
         """
         self.updated_at = datetime.now()
+        print(self.created_at,self.updated_at)
         storage.save()
 
     def to_dict(self):

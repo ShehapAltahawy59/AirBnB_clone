@@ -53,7 +53,10 @@ class FileStorage:
                 "Review": Review
                 }
         obj = FileStorage.__objects
-        with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
-            obj_dict = json.load(f)
-            for key, value in obj_dict.items():
-                obj[key] = class_dict[value["__class__"]](**value)
+        try:
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+                obj_dict = json.load(f)
+                for key, value in obj_dict.items():
+                    obj[key] = class_dict[value["__class__"]](**value)
+        except FileNotFoundError:
+            pass

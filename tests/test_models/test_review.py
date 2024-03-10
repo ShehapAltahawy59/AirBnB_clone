@@ -124,7 +124,6 @@ class TestReview_instantiation(unittest.TestCase):
         with self.assertRaises(TypeError):
             Review(id=None, created_at=None, updated_at=None)
 
-
 class TestReview(unittest.TestCase):
     """Review model class test case"""
 
@@ -165,14 +164,11 @@ class TestReview(unittest.TestCase):
         self.assertIs(type(self.review.text), str)
 
     def test_save(self):
-        model = Review()
-        sleep(1)
-        model.save()
-        self.assertNotEqual(model.created_at, model.updated_at)
+        self.review.save()
+        self.assertNotEqual(self.review.created_at, self.review.updated_at)
 
     def test_to_dict(self):
         self.assertTrue('to_dict' in dir(self.review))
-
 
 if __name__ == "__main__":
     unittest.main()

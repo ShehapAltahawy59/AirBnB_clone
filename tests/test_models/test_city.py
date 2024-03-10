@@ -18,7 +18,6 @@ import os
 from models import storage
 from models.base_model import BaseModel
 
-
 class TestCity(unittest.TestCase):
     """City model class test case"""
 

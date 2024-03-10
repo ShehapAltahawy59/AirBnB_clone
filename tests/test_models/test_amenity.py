@@ -71,6 +71,7 @@ class TestAmenity(unittest.TestCase):
         self.assertIsInstance(self.a.updated_at, datetime.datetime)
 
     def test_save(self):
+        time.sleep(1)
         self.amenity.save()
         self.assertNotEqual(self.amenity.created_at, self.amenity.updated_at)
 

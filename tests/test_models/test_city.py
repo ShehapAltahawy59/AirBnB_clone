@@ -83,6 +83,7 @@ class TestCity(unittest.TestCase):
 
     def test_save(self):
         self.city.save()
+        time.sleep(.05)
         self.assertNotEqual(self.city.created_at, self.city.updated_at)
 
     def test_to_dict(self):

@@ -108,6 +108,7 @@ class TestUser_instantiation(unittest.TestCase):
 
     def test_save(self):
         self.user.save()
+        sleep(0.05)
         self.assertNotEqual(self.user.created_at, self.user.updated_at)
 
     def test_to_dict(self):

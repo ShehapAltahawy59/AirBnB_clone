@@ -14,6 +14,7 @@ from models import storage
 from models.review import Review
 from models.base_model import BaseModel
 import uuid
+import time
 
 
 class TestReview(unittest.TestCase):
@@ -164,6 +165,7 @@ class TestReview(unittest.TestCase):
         self.assertIs(type(self.review.text), str)
 
     def test_save(self):
+        time.sleep(1)
         self.review.save()
         self.assertNotEqual(self.review.created_at, self.review.updated_at)
 

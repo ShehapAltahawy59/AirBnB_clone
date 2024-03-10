@@ -12,6 +12,7 @@ from models.amenity import Amenity
 from models.review import Review
 import json
 
+
 class HBNBCommand(cmd.Cmd):
     """cmd class
     """
@@ -117,7 +118,7 @@ class HBNBCommand(cmd.Cmd):
         print("remove model\n")
 
     def do_all(self, arg):
-        'Prints all string representation of all instances based or not on the class name'
+        'Prints all string representation '
         if arg not in self.valid_classes and arg != "":
             print("** class doesn't exist **")
         else:
@@ -174,11 +175,13 @@ class HBNBCommand(cmd.Cmd):
             print("*** Unknown syntax: {}".format(line))
         else:
             if args[1].startswith("update(") and args[1][-1] == ")":
-                arg = args[1][7:-1].replace(",", "").replace("\"", "").split(" ")
+                arg = args[1][7:-1].\
+                    replace(",", "").replace("\"", "").split(" ")
                 if arg[1].startswith("{"):
-                    arg = [x.replace("{","").replace("}","").replace(":","").strip("''")for x in arg ]
-                    my_dict = {arg[i]: arg[i + 1] for i in range(1, len(arg), 2)}
-                    for k, v in my_dict.items():
+                    arg = [x.replace("{", "").replace("}", "")for x in arg]
+                    arg = [x.replace(":", "").strip("''")for x in arg]
+                    _dict = {arg[i]: arg[i + 1] for i in range(1, len(arg), 2)}
+                    for k, v in _dict.items():
                         arg_temp = [args[0], arg[0], k, str(v)]
                         self.do_update(" ".join(arg_temp))
                 else:

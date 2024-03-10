@@ -5,7 +5,7 @@ for other classes
 import uuid
 from datetime import datetime
 from models import storage
-
+import time
 
 class BaseModel:
     """a class that defines attributes id,created_at, updated_at and methods
@@ -37,7 +37,9 @@ class BaseModel:
     def save(self):
         """updates the updated_at attr
         """
+        time.sleep(1)
         self.updated_at = datetime.now()
+        print(self.updated_at)
         storage.save()
 
     def to_dict(self):

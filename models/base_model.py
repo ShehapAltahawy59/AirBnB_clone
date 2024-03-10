@@ -37,7 +37,6 @@ class BaseModel:
     def save(self):
         """updates the updated_at attr
         """
-        time.sleep(1)
         self.updated_at = datetime.now()
         storage.save()
 

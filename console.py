@@ -10,7 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
+import json
 
 class HBNBCommand(cmd.Cmd):
     """cmd class
@@ -117,22 +117,13 @@ class HBNBCommand(cmd.Cmd):
         print("remove model\n")
 
     def do_all(self, arg):
-        """prints string representation of objects
-        """
-        my_dict = storage.all()
-        my_list = []
-        if len(arg) == 0:
-            for values in my_dict.values():
-                my_list.append(str(values))
-            print(my_list)
+        'Prints all string representation of all instances based or not on the class name'
+        if arg not in self.valid_classes and arg != "":
+            print("** class doesn't exist **")
         else:
-            if arg not in HBNBCommand.valid_classes:
-                print("** class doesn't exist **")
-            else:
-                for value in my_dict.values():
-                    if value.to_dict()["__class__"] == arg:
-                        my_list.append(str(value))
-                print(my_list)
+            for obj in storage.all().values():
+                if arg == "" or arg == obj.__class__.__name__:
+                    print(obj)
 
     def help_all(self):
         """ Prints the help documentation for EOF """
@@ -177,52 +168,31 @@ class HBNBCommand(cmd.Cmd):
                 obj.save()
                 return
 
-    def default(self, arg):
-        """change the default behavior of cmd """
-
-        _args = arg.split(".")
-        if len(_args) != 2:
-            print("*** Unknown syntax: {}".format(arg))
+    def default(self, line):
+        args = line.split('.')
+        if len(args) != 2:
+            print("*** Unknown syntax: {}".format(line))
         else:
-            class_name = _args[0]
-            command_name = _args[1].split("(")[0]
-            args = _args[1].split("(")[1].split(")")[0].split("''")[0]
-            values = args.split(",")
-            _values = [value.strip('""') for value in values]
-            cleaned_value_string = ' '.join(_values)
-
-            if len(_values) == 2:
-                if _values[1].startswith("{") and _values[1].endswith("}"):
-                    attribute_value_pairs = _values[1][1:-1].split(",")
-                    dictt = {}
-                    for pair in attribute_value_pairs:
-                        attr, val = pair.split(":")
-                        dictt[attr.strip('""')] = val.strip('""')
-                        x, y = dictt.items()[0]
-                    string = "{} {} {}".format(_values[0], x, y)
-                    cleaned_value_string = ' '.join(string)
-
-            command_dict = {
-                "all": self.do_all,
-                "count": self.do_count,
-                "show": self.do_show,
-                "destroy": self.do_destroy,
-                "update": self.do_update
-            }
-            if command_name in command_dict.keys():
-                command = command_dict[command_name]
-
-                if command_name == "show" or command_name == "destroy":
-                    s = "{}{}{}".format((class_name), " ", args.strip('""'))
-                    return command(s)
-
-                elif command_name == "update":
-                    string = "{} {}".format((class_name), cleaned_value_string)
-                    return command(string)
+            if args[1].startswith("update(") and args[1][-1] == ")":
+                arg = args[1][7:-1].replace(",", "").replace("\"", "").split(" ")
+                if arg[1].startswith("{"):
+                    arg = [x.replace("{","").replace("}","").replace(":","").strip("''")for x in arg ]
+                    my_dict = {arg[i]: arg[i + 1] for i in range(1, len(arg), 2)}
+                    for k, v in my_dict.items():
+                        arg_temp = [args[0], arg[0], k, str(v)]
+                        self.do_update(" ".join(arg_temp))
                 else:
-                    return command("{}{}".format(class_name, ""))
-            else:
-                print("*** Unknown syntax: {}".format(arg))
+                    self.do_update(args[0] + " " + " ".join(arg))
+            elif args[1].startswith("destroy(") and args[1][-1] == ")":
+                arg = args[1][8:-1]
+                self.do_destroy(args[0] + " " + arg)
+            elif args[1].startswith("show(") and args[1][-1] == ")":
+                arg = args[1][5:-1]
+                self.do_show(args[0] + " " + arg)
+            elif args[1] == "all()":
+                self.do_all(args[0])
+            elif args[1] == "count()":
+                self.do_count(args[0])
 
     def do_count(self, arg):
         """print count of class instance"""

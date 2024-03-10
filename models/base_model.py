@@ -39,7 +39,6 @@ class BaseModel:
         """
         time.sleep(1)
         self.updated_at = datetime.now()
-        print(self.updated_at)
         storage.save()
 
     def to_dict(self):

@@ -5,7 +5,7 @@ for other classes
 import uuid
 from datetime import datetime
 from models import storage
-import time
+
 
 class BaseModel:
     """a class that defines attributes id,created_at, updated_at and methods

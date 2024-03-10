@@ -153,7 +153,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
         else:
-            
+
             key = "{}.{}".format(commands[0], commands[1])
             objs = storage.all()
             if key not in objs.keys():
@@ -173,7 +173,6 @@ class HBNBCommand(cmd.Cmd):
                     pass
                 att_name = commands[2]
                 att_value = commands[3].strip('""')
-                #obj = objs[key]
                 setattr(obj, att_name, att_value)
                 obj.save()
                 return
@@ -181,14 +180,14 @@ class HBNBCommand(cmd.Cmd):
     def default(self, arg):
         """change the default behavior of cmd """
 
-        args = arg.split(".")
-        if len(args) != 2:
+        _args = arg.split(".")
+        if len(_args) != 2:
             print("*** Unknown syntax: {}".format(arg))
         else:
-            class_name = args[0]
-            command_name = args[1].split("(")[0]
-            command_args = args[1].split("(")[1].split(")")[0].split("''")[0]
-            values = command_args.split(",")
+            class_name = _args[0]
+            command_name = _args[1].split("(")[0]
+            args = _args[1].split("(")[1].split(")")[0].split("''")[0]
+            values = args.split(",")
             _values = [value.strip('""') for value in values]
             cleaned_value_string = ' '.join(_values)
 
@@ -214,8 +213,8 @@ class HBNBCommand(cmd.Cmd):
                 command = command_dict[command_name]
 
                 if command_name == "show" or command_name == "destroy":
-                    string = "{}{}{}".format((class_name), " ", command_args.strip('""'))
-                    return command(string)
+                    s = "{}{}{}".format((class_name), " ", args.strip('""'))
+                    return command(s)
 
                 elif command_name == "update":
                     string = "{} {}".format((class_name), cleaned_value_string)
@@ -224,7 +223,6 @@ class HBNBCommand(cmd.Cmd):
                     return command("{}{}".format(class_name, ""))
             else:
                 print("*** Unknown syntax: {}".format(arg))
-
 
     def do_count(self, arg):
         """print count of class instance"""
